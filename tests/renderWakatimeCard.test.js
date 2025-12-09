@@ -1,14 +1,13 @@
+import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
 import "@testing-library/jest-dom";
-import { renderWakatimeCard } from "../src/cards/wakatime-card.js";
-import { getCardColors } from "../src/common/utils.js";
+import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import { wakaTimeData } from "./fetchWakatime.test.js";
-import { expect, it, describe } from "@jest/globals";
 
-describe("Test Render Wakatime Card", () => {
+describe("Test Render WakaTime Card", () => {
   it("should render correctly", () => {
-    // const card = renderWakatimeCard(wakaTimeData.data);
-    expect(getCardColors).toMatchSnapshot();
+    const card = renderWakatimeCard(wakaTimeData.data);
+    expect(card).toMatchSnapshot();
   });
 
   it("should render correctly with compact layout", () => {
@@ -39,12 +38,12 @@ describe("Test Render Wakatime Card", () => {
   it("should render translations", () => {
     document.body.innerHTML = renderWakatimeCard({}, { locale: "cn" });
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "Wakatime 周统计",
+      "WakaTime 周统计",
     );
     expect(
       document.querySelector('g[transform="translate(0, 0)"]>text.stat.bold')
         .textContent,
-    ).toBe("Wakatime 用户个人资料未公开");
+    ).toBe("WakaTime 用户个人资料未公开");
   });
 
   it("should render without rounding", () => {
@@ -82,5 +81,12 @@ describe("Test Render Wakatime Card", () => {
     expect(document.querySelector(".stat").textContent).toBe(
       "No coding activity this week",
     );
+  });
+
+  it("should render correctly with percent display format", () => {
+    const card = renderWakatimeCard(wakaTimeData.data, {
+      display_format: "percent",
+    });
+    expect(card).toMatchSnapshot();
   });
 });

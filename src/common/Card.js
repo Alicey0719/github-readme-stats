@@ -1,24 +1,25 @@
-import { getAnimations } from "../getStyles.js";
-import { encodeHTML, flexLayout } from "./utils.js";
+// @ts-check
+
+import { encodeHTML } from "./html.js";
+import { flexLayout } from "./render.js";
 
 class Card {
   /**
    * Creates a new card instance.
    *
    * @param {object} args Card arguments.
-   * @param {number?=} args.width Card width.
-   * @param {number?=} args.height Card height.
-   * @param {number?=} args.border_radius Card border radius.
-   * @param {string?=} args.customTitle Card custom title.
-   * @param {string?=} args.defaultTitle Card default title.
-   * @param {string?=} args.titlePrefixIcon Card title prefix icon.
-   * @param {object?=} args.colors Card colors arguments.
-   * @param {string} args.colors.titleColor Card title color.
-   * @param {string} args.colors.textColor Card text color.
-   * @param {string} args.colors.iconColor Card icon color.
-   * @param {string|Array} args.colors.bgColor Card background color.
-   * @param {string} args.colors.borderColor Card border color.
-   * @returns {Card} Card instance.
+   * @param {number=} args.width Card width.
+   * @param {number=} args.height Card height.
+   * @param {number=} args.border_radius Card border radius.
+   * @param {string=} args.customTitle Card custom title.
+   * @param {string=} args.defaultTitle Card default title.
+   * @param {string=} args.titlePrefixIcon Card title prefix icon.
+   * @param {object} [args.colors={}] Card colors arguments.
+   * @param {string=} args.colors.titleColor Card title color.
+   * @param {string=} args.colors.textColor Card text color.
+   * @param {string=} args.colors.iconColor Card icon color.
+   * @param {string|string[]=} args.colors.bgColor Card background color.
+   * @param {string=} args.colors.borderColor Card border color.
    */
   constructor({
     width = 100,
@@ -40,9 +41,9 @@ class Card {
     // returns theme based colors with proper overrides and defaults
     this.colors = colors;
     this.title =
-      customTitle !== undefined
-        ? encodeHTML(customTitle)
-        : encodeHTML(defaultTitle);
+      customTitle === undefined
+        ? encodeHTML(defaultTitle)
+        : encodeHTML(customTitle);
 
     this.css = "";
 
@@ -139,7 +140,7 @@ class Card {
         transform="translate(${this.paddingX}, ${this.paddingY})"
       >
         ${flexLayout({
-          items: [this.titlePrefixIcon && prefixIcon, titleText],
+          items: [this.titlePrefixIcon ? prefixIcon : "", titleText],
           gap: 25,
         }).join("")}
       </g>
@@ -150,7 +151,9 @@ class Card {
    * @returns {string} The rendered card gradient.
    */
   renderGradient() {
-    if (typeof this.colors.bgColor !== "object") return "";
+    if (typeof this.colors.bgColor !== "object") {
+      return "";
+    }
 
     const gradients = this.colors.bgColor.slice(1);
     return typeof this.colors.bgColor === "object"
@@ -170,6 +173,33 @@ class Card {
         `
       : "";
   }
+
+  /**
+   * Retrieves css animations for a card.
+   *
+   * @returns {string} Animation css.
+   */
+  getAnimations = () => {
+    return `
+      /* Animations */
+      @keyframes scaleInAnimation {
+        from {
+          transform: translate(-5px, 5px) scale(0);
+        }
+        to {
+          transform: translate(-5px, 5px) scale(1);
+        }
+      }
+      @keyframes fadeInAnimation {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    `;
+  };
 
   /**
    * @param {string} body The inner body of the card.
@@ -200,7 +230,7 @@ class Card {
           }
           ${this.css}
 
-          ${process.env.NODE_ENV === "test" ? "" : getAnimations()}
+          ${process.env.NODE_ENV === "test" ? "" : this.getAnimations()}
           ${
             this.animations === false
               ? `* { animation-duration: 0s !important; animation-delay: 0s !important; }`

@@ -1,4 +1,4 @@
-name: prs cache clean
+name: Cleanup closed pull requests cache
 on:
   pull_request:
     types:
@@ -22,9 +22,6 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
       - name: Cleanup
         run: |
           gh extension install actions/gh-actions-cache

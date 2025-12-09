@@ -14,7 +14,7 @@ const THEME_TEMPLATE = `## Available Themes
 
 With inbuilt themes, you can customize the look of the card without doing any manual customization.
 
-Use \`?theme=THEME_NAME\` parameter like so :-
+Use \`?theme=THEME_NAME\` parameter like so:
 
 \`\`\`md
 ![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&theme=dark&show_icons=true)
@@ -22,7 +22,7 @@ Use \`?theme=THEME_NAME\` parameter like so :-
 
 ## Stats
 
-> These themes work both for the Stats Card and Repo Card.
+> These themes work with all five of our cards: Stats Card, Repo Card, Gist Card, Top Languages Card, and WakaTime Card.
 
 | | | |
 | :--: | :--: | :--: |
@@ -30,7 +30,7 @@ ${STAT_CARD_TABLE_FLAG}
 
 ## Repo Card
 
-> These themes work both for the Stats Card and Repo Card.
+> These themes work with all five of our cards: Stats Card, Repo Card, Gist Card, Top Languages Card, and WakaTime Card.
 
 | | | |
 | :--: | :--: | :--: |
@@ -39,11 +39,6 @@ ${REPO_CARD_TABLE_FLAG}
 ${STAT_CARD_LINKS_FLAG}
 
 ${REPO_CARD_LINKS_FLAG}
-
-
-[add-theme]: https://github.com/anuraghazra/github-readme-stats/edit/master/themes/index.js
-
-Want to add a new theme? Consider reading the [contribution guidelines](../CONTRIBUTING.md#themes-contribution) :D
 `;
 
 const createRepoMdLink = (theme) => {
@@ -60,13 +55,16 @@ const generateLinks = (fn) => {
 };
 
 const createTableItem = ({ link, label, isRepoCard }) => {
-  if (!link || !label) return "";
+  if (!link || !label) {
+    return "";
+  }
   return `\`${label}\` ![${link}][${link}${isRepoCard ? "_repo" : ""}]`;
 };
+
 const generateTable = ({ isRepoCard }) => {
   const rows = [];
   const themesFiltered = Object.keys(themes).filter(
-    (name) => name !== (!isRepoCard ? "default_repocard" : "default"),
+    (name) => name !== (isRepoCard ? "default" : "default_repocard"),
   );
 
   for (let i = 0; i < themesFiltered.length; i += 3) {
@@ -78,15 +76,7 @@ const generateTable = ({ isRepoCard }) => {
     let tableItem2 = createTableItem({ link: two, label: two, isRepoCard });
     let tableItem3 = createTableItem({ link: three, label: three, isRepoCard });
 
-    if (three === undefined) {
-      tableItem3 = `[Add your theme][add-theme]`;
-    }
     rows.push(`| ${tableItem1} | ${tableItem2} | ${tableItem3} |`);
-
-    // if it's the last row & the row has no empty space push a new row
-    if (three && i + 3 === themesFiltered.length) {
-      rows.push(`| [Add your theme][add-theme] | | |`);
-    }
   }
 
   return rows.join("\n");

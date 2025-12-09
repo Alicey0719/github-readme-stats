@@ -1,7 +1,19 @@
+/**
+ * Calculates the exponential cdf.
+ *
+ * @param {number} x The value.
+ * @returns {number} The exponential cdf.
+ */
 function exponential_cdf(x) {
   return 1 - 2 ** -x;
 }
 
+/**
+ * Calculates the log normal cdf.
+ *
+ * @param {number} x The value.
+ * @returns {number} The log normal cdf.
+ */
 function log_normal_cdf(x) {
   // approximation
   return x / (1 + x);
@@ -19,7 +31,7 @@ function log_normal_cdf(x) {
  * @param {number} params.repos Total number of repos.
  * @param {number} params.stars The number of stars.
  * @param {number} params.followers The number of followers.
- * @returns {{level: string, percentile: number}}} The users rank.
+ * @returns {{ level: string, percentile: number }} The users rank.
  */
 function calculateRank({
   all_commits,

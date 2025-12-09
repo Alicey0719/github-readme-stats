@@ -1,10 +1,10 @@
+import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { Card } from "../src/common/Card.js";
 import { icons } from "../src/common/icons.js";
-import { getCardColors } from "../src/common/utils.js";
-import { expect, it, describe } from "@jest/globals";
+import { getCardColors } from "../src/common/color.js";
 
 describe("Card", () => {
   it("should hide border", () => {
@@ -34,6 +34,16 @@ describe("Card", () => {
       customTitle: "custom title",
       defaultTitle: "default title",
     });
+
+    document.body.innerHTML = card.render(``);
+    expect(queryByTestId(document.body, "card-title")).toHaveTextContent(
+      "custom title",
+    );
+  });
+
+  it("should set custom title", () => {
+    const card = new Card({});
+    card.setTitle("custom title");
 
     document.body.innerHTML = card.render(``);
     expect(queryByTestId(document.body, "card-title")).toHaveTextContent(
@@ -79,7 +89,7 @@ describe("Card", () => {
       "200",
     );
     expect(document.getElementsByTagName("svg")[0]).toHaveAttribute(
-      "height",
+      "width",
       "200",
     );
   });
