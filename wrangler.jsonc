@@ -1,0 +1,21 @@
+{
+  "name": "github-readme-stats",
+  "main": "cloudflare/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "alias": {
+    // src/cards/{gist,wakatime}.js load JSON via createRequire.
+    "module": "./cloudflare/module-shim.js",
+    // src/fetchers/stats.js reads .env; Workers gets vars from bindings.
+    "dotenv": "./cloudflare/dotenv-shim.js",
+  },
+  // Keep vars set in the dashboard. Put PAT_* and other settings there as secrets.
+  "keep_vars": true,
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "github-readme-stats.alicey.dev",
+      "custom_domain": true,
+    },
+  ],
+}
