@@ -1,0 +1,15 @@
+{
+  "name": "github-readme-stats-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev -c ../wrangler.jsonc",
+    "deploy": "wrangler deploy -c ../wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.149.0"
+  },
+  "overrides": {
+    "undici": "7.30.1"
+  }
+}
